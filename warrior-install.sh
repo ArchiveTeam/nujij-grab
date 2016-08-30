@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if ! sudo pip freeze | grep -q requests
 then
   echo "Installing Requests"
