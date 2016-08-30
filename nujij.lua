@@ -153,6 +153,11 @@ wget.callbacks.httploop_result = function(url, err, http_stat)
       downloaded[url.url] = true
     end
   end
+
+  if status_code == 302
+     and string.match(url["url"], "^http://www%.nujij%.nl/Default%.lynkx%?id=[0-9]+$") then
+    return wget.actions.EXIT
+  end
   
   if status_code >= 500 or
     (status_code >= 400 and status_code ~= 404) or
