@@ -36,7 +36,7 @@ end
 
 allowed = function(url)
   for s in string.gmatch(url, "([0-9]+)") do
-    if ids[tonumber(s)] == true and string.match(url, "^https?://[^/]*nujij%.nl") then
+    if ids[tonumber(s)] == true and string.match(url, "^https?://[^/]*nujij%.nl") and not string.match(url, "login%.2051048%.lynkx") then
       return true
     end
   end
@@ -47,7 +47,13 @@ wget.callbacks.download_child_p = function(urlpos, parent, depth, start_url_pars
   local url = urlpos["url"]["url"]
   local html = urlpos["link_expect_html"]
 
-  if (downloaded[url] ~= true and addedtolist[url] ~= true) and (allowed(url) or html == 0) and not string.match(url, "login%.2051048%.lynkx") then
+  if (downloaded[url] ~= true and addedtolist[url] ~= true)
+     and (allowed(url)
+     or string.match(url, "^https?://img%.nujij%.nl")
+     or string.match(url, "^https?://media%.nu%.nl")
+     or string.match(url, "^https?://[^/]*nu%.nl.+%.jpg$")
+     or html == 0)
+     and not string.match(url, "login%.2051048%.lynkx") then
     addedtolist[url] = true
     return true
   else
@@ -63,7 +69,10 @@ wget.callbacks.get_urls = function(file, url, is_css, iri)
   
   local function check(urla)
     local url = string.match(urla, "^([^#]+)")
-    if (downloaded[url] ~= true and addedtolist[url] ~= true) and allowed(url) then
+    if (downloaded[url] ~= true and addedtolist[url] ~= true) and (allowed(url) 
+       or string.match(url, "^https?://img%.nujij%.nl")
+       or string.match(url, "^https?://media%.nu%.nl")
+       or string.match(url, "^https?://[^/]*nu%.nl.+%.jpg$")) then
       if string.match(url, "&amp;") then
         table.insert(urls, { url=string.gsub(url, "&amp;", "&") })
         addedtolist[url] = true

@@ -16,11 +16,6 @@ import subprocess
 import sys
 import time
 import string
-try:
-    import requests
-except ImportError:
-    print('Please install requests.')
-    sys.exit(1)
 
 import seesaw
 from seesaw.externalprocess import WgetDownload
@@ -63,7 +58,7 @@ if not WGET_LUA:
 #
 # Update this each time you make a non-cosmetic change.
 # It will be added to the WARC files and reported to the tracker.
-VERSION = "20160825.01"
+VERSION = "20160830.01"
 USER_AGENT = 'ArchiveTeam'
 TRACKER_ID = 'nujij'
 TRACKER_HOST = 'tracker.archiveteam.org'
@@ -213,9 +208,6 @@ class WgetArgs(object):
                 url = 'http://www.nujij.nl/Default.lynkx?id={i}'.format(**locals())
                 wget_args.extend(['--warc-header', 'nujij-article: {i}'.format(**locals())])
                 wget_args.append(url)
-                response = requests.get(url)
-                if str(i) in response.url and response.url != url:
-                    wget_args.append(response.url)
         else:
             raise Exception('Unknown item')
         
